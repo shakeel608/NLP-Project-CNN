@@ -1,0 +1,71 @@
+import csv
+import re
+import nltk
+from nltk.corpus import stopwords
+import string
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
+import re
+stop_words = set(stopwords.words("english"))
+##with open(".csv") as csvFile:
+
+  
+ 
+##with open('Bukhari_Sharief_Book0test.csv','w') as fout:
+##    writeCSV = csv.writer(fout,delimiter=',')
+##    with open('Bukhari_Sharief_Book0.csv') as fin:
+##        readCSV = csv.reader(fin, delimiter=',') 
+##        for row in readCSV:
+##            row_0=row[0].replace('[','')
+##            writeCSV.writerow(row_0)
+
+out = open("Bukhari_Sharief_Book1.csv","rb")
+data = csv.reader(out)
+#[row[0].replace('(',''),row[1].replace('[',''), row[2].replace('\t',''),row[3].replace('"',''),row[4].replace('(','')]
+new_data  = [row for row in data]
+r6=''
+out = open("Sahih_Bukhari_Dataset_1.csv","wb")
+#rs = re.sub(r'[\(\t\)\n\"\\\'\?.]','',s)
+for row in new_data:
+    r1 = re.sub(r'[\]\[\(]+','',row[0])
+    #print(str(r1))
+    r2 = re.sub(r'[\]\[]+','',row[1])
+    #print(r2)
+    r3 = re.sub(r'[\]\[]+','',row[2])
+    #print(r3)
+    r4 = re.sub(r'[\"\']+','',row[3])
+    #print(r4)
+    r5 = re.sub(r'[\(\t\)\n\"\\\'\?.!]','',row[4])
+    r_lower = r5.lower()
+    tokenizer = RegexpTokenizer(r'\w+')
+    tok = tokenizer.tokenize(r_lower)
+    r6 = ''
+    for word in tok:
+        if word not in stop_words:
+            r6 +=word
+            r6 +=' '
+            
+    line = r1,r2,r3,r4,r6
+    #print(str(r6))
+    output = csv.writer(out)
+    output.writerow(line)
+out.close()             
+
+    
+
+##with open("Bukhari_Sharief_Book0.csv") as csvFile:
+##    readCSV = csv.reader(csvFile,delimiter=',')
+##    for row in readCSV:
+##        row = row.lower()
+##        tokenizer = RegexpTokenizer('r\w+')
+####        tok = tokenizer.tokenize(row)
+######        csvFile.write(str(row))
+##sentenceLine = r5.lower()
+##    tokenizer = RegexpTokenizer(r'\w+')
+##    tok = tokenizer.tokenize(sentenceLine)
+##    for w in tok:
+##        if w not in stop_words:
+##            r6 = ''.join(w)
+
+
