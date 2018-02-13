@@ -1,0 +1,62 @@
+ 
+import csv
+import re
+from string import punctuation
+import string
+ 
+
+textFile = open("Bukhari_Sharief_Book1.txt", "r")
+lines = textFile.readlines()
+textFile.close()
+csvFile = open('Sahih_Bukhari_Dataset_1.csv','wb')
+#WriteHEaders in file
+#csvFile.writerow(['BookNumber','VolumeNumber','HadithNumber','Narrator','HadithText'])
+columnTitleRow = "BookNumber,VolumeNumber,HadithNumber,Narrator,HadithText\n"
+csvFile.write(columnTitleRow)
+n = 1
+ 
+for line in lines:
+    w = line
+    BookNumber=w.split("Volume",1)[0]
+    VolumeNumber = w.split("Hadith",1)[0]
+    VolumeNumber = VolumeNumber.split("Volume")[1]
+    HadithNumber = w.split("Narrated",1)[0]
+    HadithNumber = HadithNumber.split("Hadith",1)[1]
+    RemoveCDForSplit_1     = w.split("Narrated",1)[1]
+    Narrator    = re.sub(r'[,\.]',':',RemoveCDForSplit_1)
+    Narrator     = Narrator.split(":",1)[0]
+    
+    print(Narrator)
+    RemoveCDForSplit_2   = w.split("Narrated",1)[1]
+    HadithText         = re.sub(r'[,.]',':',RemoveCDForSplit_2)    
+    HadithText   = HadithText.split(":",1)[1] 
+    
+    
+    
+    #for bn in BookNumber:
+        #if bn.isdigit():
+    book_dig = re.findall(r'\d{1,9}',BookNumber)
+    book_num = map(int,book_dig)
+    
+     
+    
+    #print(book_num)
+         
+    vol_dig = re.findall(r'\d{1,9}',VolumeNumber)
+    vol_num = map(int, vol_dig)
+    #print(vol_num)
+    had_dig = re.findall(r'\d{1,9}',HadithNumber)
+    had_num = map(int,had_dig)
+    print(had_num)
+     
+
+    h_text = string.replace(HadithText,',','')
+    h_text = re.sub(r'\t','',h_text)
+    h_text = re.sub(r'\n','',h_text)
+    
+               
+    row = book_num,vol_num,had_num,Narrator,h_text
+    csvFile.write(str(row))
+    csvFile.write('\n')
+    n = n+1
+print(n)        
