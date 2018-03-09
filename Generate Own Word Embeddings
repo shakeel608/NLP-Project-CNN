@@ -1,0 +1,32 @@
+import warnings
+warnings.filterwarnings(action='ignore', category=UserWarning, module='gensim')
+
+
+from gensim.models import Word2Vec
+from sklearn.decomposition import PCA
+from matplotlib import pyplot
+import csv
+import re
+from nltk.tokenize import word_tokenize
+from nltk.tokenize import RegexpTokenizer
+
+
+ 
+
+sentences = []
+tokenizer = RegexpTokenizer(r'\w+')
+
+##Read CSV File HadithText
+with open("C:\SahihBukhariPreprocessed\Sahih_Bukhari_Dataset_0.csv") as csvFile:
+    readCSV = csv.reader(csvFile, delimiter=',')
+    for row in readCSV:
+        tok = tokenizer.tokenize(row[4])            ##Tokenization and Appending of Words
+        sentences.append(tok)
+        
+##Toekinzation
+model = Word2Vec(sentences)                        ##Generate Text WordEmbeddings
+    
+words = list(model.wv.vocab)                       ##Visualize WordList from Embeddings
+
+#print(words)
+print(model['remember'])                           ##Visualize WordEmbeddings word specific
